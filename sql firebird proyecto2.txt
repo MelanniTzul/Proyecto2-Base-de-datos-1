@@ -1,0 +1,1316 @@
+/* =============================================================================
+   PROYECTO 2 - MODELO FÍSICO (DDL)
+   Indicadores Sociales y Sanitarios de Guatemala
+   Total tablas: 94   |   Normalización: 3FN
+   ============================================================================= */
+
+SET AUTODDL OFF;
+COMMIT;
+
+/* =============================================================================
+   1. SECUENCIAS (GENERATORS)
+   ============================================================================= */
+CREATE SEQUENCE seq_pais;
+CREATE SEQUENCE seq_region;
+CREATE SEQUENCE seq_departamento;
+CREATE SEQUENCE seq_municipio;
+CREATE SEQUENCE seq_area_geo;
+CREATE SEQUENCE seq_sexo;
+CREATE SEQUENCE seq_etnia;
+CREATE SEQUENCE seq_idioma;
+CREATE SEQUENCE seq_estado_civil;
+CREATE SEQUENCE seq_religion;
+CREATE SEQUENCE seq_discapacidad;
+CREATE SEQUENCE seq_grupo_etario;
+CREATE SEQUENCE seq_nivel_educativo;
+CREATE SEQUENCE seq_institucion_edu;
+CREATE SEQUENCE seq_tipo_vivienda;
+CREATE SEQUENCE seq_nivel_socio;
+CREATE SEQUENCE seq_sector_econ;
+CREATE SEQUENCE seq_persona;
+CREATE SEQUENCE seq_persona_idioma;
+CREATE SEQUENCE seq_persona_disc;
+CREATE SEQUENCE seq_domicilio;
+CREATE SEQUENCE seq_contacto;
+CREATE SEQUENCE seq_escolaridad;
+CREATE SEQUENCE seq_ocupacion;
+CREATE SEQUENCE seq_tipo_empleo;
+CREATE SEQUENCE seq_cond_laboral;
+CREATE SEQUENCE seq_empleo;
+CREATE SEQUENCE seq_hogar;
+CREATE SEQUENCE seq_persona_hogar;
+CREATE SEQUENCE seq_eje_violencia;
+CREATE SEQUENCE seq_tipo_denuncia;
+CREATE SEQUENCE seq_inst_reporte;
+CREATE SEQUENCE seq_estado_denuncia;
+CREATE SEQUENCE seq_denuncia;
+CREATE SEQUENCE seq_persona_denuncia;
+CREATE SEQUENCE seq_seguim_denuncia;
+CREATE SEQUENCE seq_clasif_delito;
+CREATE SEQUENCE seq_tipo_hecho;
+CREATE SEQUENCE seq_hecho;
+CREATE SEQUENCE seq_arma;
+CREATE SEQUENCE seq_hecho_arma;
+CREATE SEQUENCE seq_movil;
+CREATE SEQUENCE seq_hecho_movil;
+CREATE SEQUENCE seq_lugar_ocurr;
+CREATE SEQUENCE seq_victima;
+CREATE SEQUENCE seq_agresor;
+CREATE SEQUENCE seq_lab_forense;
+CREATE SEQUENCE seq_forense;
+CREATE SEQUENCE seq_necropsia;
+CREATE SEQUENCE seq_exhumacion;
+CREATE SEQUENCE seq_juzgado;
+CREATE SEQUENCE seq_tipo_delito_jz;
+CREATE SEQUENCE seq_pena;
+CREATE SEQUENCE seq_sentencia;
+CREATE SEQUENCE seq_persona_sent;
+CREATE SEQUENCE seq_detalle_sent;
+CREATE SEQUENCE seq_tipo_vm;
+CREATE SEQUENCE seq_centro_at;
+CREATE SEQUENCE seq_tipo_at;
+CREATE SEQUENCE seq_hecho_vm;
+CREATE SEQUENCE seq_atencion_m;
+CREATE SEQUENCE seq_tipo_vif;
+CREATE SEQUENCE seq_rel_agr_vict;
+CREATE SEQUENCE seq_hecho_vif;
+CREATE SEQUENCE seq_tipo_vi;
+CREATE SEQUENCE seq_hecho_vi;
+CREATE SEQUENCE seq_sector_ti;
+CREATE SEQUENCE seq_tipo_ti;
+CREATE SEQUENCE seq_jornada_ti;
+CREATE SEQUENCE seq_trabajo_inf;
+CREATE SEQUENCE seq_embarazo_ado;
+CREATE SEQUENCE seq_control_pren;
+CREATE SEQUENCE seq_tipo_disc;
+CREATE SEQUENCE seq_grupo_pob;
+CREATE SEQUENCE seq_hecho_disc;
+CREATE SEQUENCE seq_tipo_falta;
+CREATE SEQUENCE seq_sancion;
+CREATE SEQUENCE seq_falta_jud;
+CREATE SEQUENCE seq_cap_cie10;
+CREATE SEQUENCE seq_cie10;
+CREATE SEQUENCE seq_cat_indic;
+CREATE SEQUENCE seq_indicador;
+CREATE SEQUENCE seq_tipo_centro_s;
+CREATE SEQUENCE seq_centro_salud;
+CREATE SEQUENCE seq_reg_salud;
+CREATE SEQUENCE seq_reg_desnut;
+CREATE SEQUENCE seq_reg_cronica;
+CREATE SEQUENCE seq_vector;
+CREATE SEQUENCE seq_reg_vector;
+CREATE SEQUENCE seq_complic_emb;
+CREATE SEQUENCE seq_reg_morbi;
+CREATE SEQUENCE seq_tipo_enc;
+CREATE SEQUENCE seq_encuesta;
+CREATE SEQUENCE seq_resp_encuesta;
+
+COMMIT;
+
+/* =============================================================================
+   2. GEOGRAFÍA
+   ============================================================================= */
+
+CREATE TABLE Pais (
+    id_pais        INTEGER NOT NULL PRIMARY KEY,
+    nombre_pais    VARCHAR(100) NOT NULL,
+    codigo_iso     VARCHAR(10)
+);
+
+CREATE TABLE Region (
+    id_region      INTEGER NOT NULL PRIMARY KEY,
+    id_pais        INTEGER NOT NULL,
+    nombre_region  VARCHAR(100) NOT NULL,
+    codigo_region  VARCHAR(10),
+    CONSTRAINT fk_region_pais FOREIGN KEY (id_pais) REFERENCES Pais(id_pais)
+);
+
+CREATE TABLE Departamento (
+    id_departamento     INTEGER NOT NULL PRIMARY KEY,
+    id_region           INTEGER NOT NULL,
+    nombre_departamento VARCHAR(100) NOT NULL,
+    codigo_departamento VARCHAR(10),
+    cabecera            VARCHAR(100),
+    CONSTRAINT fk_depto_region FOREIGN KEY (id_region) REFERENCES Region(id_region)
+);
+
+CREATE TABLE Area_Geografica (
+    id_area_geo     INTEGER NOT NULL PRIMARY KEY,
+    nombre_area     VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Municipio (
+    id_municipio        INTEGER NOT NULL PRIMARY KEY,
+    id_departamento     INTEGER NOT NULL,
+    id_area_geo         INTEGER,
+    nombre_municipio    VARCHAR(100) NOT NULL,
+    codigo_municipio    VARCHAR(10),
+    poblacion_estimada  INTEGER,
+    latitud              DECIMAL(10,6),
+    longitud            DECIMAL(10,6),
+    CONSTRAINT fk_muni_depto FOREIGN KEY (id_departamento) REFERENCES Departamento(id_departamento),
+    CONSTRAINT fk_muni_area  FOREIGN KEY (id_area_geo) REFERENCES Area_Geografica(id_area_geo)
+);
+
+/* =============================================================================
+   3. CATÁLOGOS BASE
+   ============================================================================= */
+
+CREATE TABLE Sexo (
+    id_sexo     INTEGER NOT NULL PRIMARY KEY,
+    nombre_sexo VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE Etnia (
+    id_etnia     INTEGER NOT NULL PRIMARY KEY,
+    nombre_etnia VARCHAR(50) NOT NULL,
+    descripcion  VARCHAR(200)
+);
+
+CREATE TABLE Idioma (
+    id_idioma     INTEGER NOT NULL PRIMARY KEY,
+    nombre_idioma VARCHAR(50) NOT NULL,
+    es_oficial    SMALLINT DEFAULT 0
+);
+
+CREATE TABLE Estado_Civil (
+    id_estado_civil     INTEGER NOT NULL PRIMARY KEY,
+    nombre_estado_civil VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Religion (
+    id_religion     INTEGER NOT NULL PRIMARY KEY,
+    nombre_religion VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Discapacidad (
+    id_discapacidad     INTEGER NOT NULL PRIMARY KEY,
+    nombre_discapacidad VARCHAR(80) NOT NULL,
+    descripcion          VARCHAR(200)
+);
+
+CREATE TABLE Grupo_Etario (
+    id_grupo_etario     INTEGER NOT NULL PRIMARY KEY,
+    nombre_grupo_etario VARCHAR(50) NOT NULL,
+    rango_edad_min      INTEGER NOT NULL,
+    rango_edad_max      INTEGER NOT NULL
+);
+
+CREATE TABLE Nivel_Educativo (
+    id_nivel_educativo INTEGER NOT NULL PRIMARY KEY,
+    nombre_nivel        VARCHAR(100) NOT NULL,
+    orden               INTEGER,
+    descripcion         VARCHAR(200)
+);
+
+CREATE TABLE Institucion_Educativa (
+    id_institucion_edu  INTEGER NOT NULL PRIMARY KEY,
+    id_municipio        INTEGER,
+    nombre_institucion  VARCHAR(150) NOT NULL,
+    sector              VARCHAR(30),
+    CONSTRAINT fk_ie_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Tipo_Vivienda (
+    id_tipo_vivienda     INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_vivienda VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Nivel_Socioeconomico (
+    id_nivel_socio  INTEGER NOT NULL PRIMARY KEY,
+    nombre_nivel    VARCHAR(50) NOT NULL,
+    ingreso_min     DECIMAL(10,2),
+    ingreso_max     DECIMAL(10,2)
+);
+
+CREATE TABLE Sector_Economico (
+    id_sector_econ  INTEGER NOT NULL PRIMARY KEY,
+    nombre_sector    VARCHAR(100) NOT NULL,
+    codigo_ciiu      VARCHAR(10)
+);
+
+/* =============================================================================
+   4. PERSONA Y HOGAR
+   ============================================================================= */
+
+CREATE TABLE Persona (
+    id_persona            INTEGER NOT NULL PRIMARY KEY,
+    nombres               VARCHAR(100),
+    apellidos             VARCHAR(100),
+    fecha_nacimiento      DATE,
+    id_sexo               INTEGER,
+    id_etnia              INTEGER,
+    id_estado_civil       INTEGER,
+    id_religion           INTEGER,
+    numero_identificacion VARCHAR(50),
+    es_anonimo            SMALLINT DEFAULT 0,
+    CONSTRAINT fk_pers_sexo  FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo),
+    CONSTRAINT fk_pers_etnia FOREIGN KEY (id_etnia) REFERENCES Etnia(id_etnia),
+    CONSTRAINT fk_pers_ec    FOREIGN KEY (id_estado_civil) REFERENCES Estado_Civil(id_estado_civil),
+    CONSTRAINT fk_pers_rel   FOREIGN KEY (id_religion) REFERENCES Religion(id_religion)
+);
+
+CREATE TABLE Persona_Idioma (
+    id_persona_idioma INTEGER NOT NULL PRIMARY KEY,
+    id_persona        INTEGER NOT NULL,
+    id_idioma         INTEGER NOT NULL,
+    es_materno        SMALLINT DEFAULT 0,
+    CONSTRAINT fk_pi_pers    FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_pi_idioma FOREIGN KEY (id_idioma) REFERENCES Idioma(id_idioma)
+);
+
+CREATE TABLE Persona_Discapacidad (
+    id_persona_disc  INTEGER NOT NULL PRIMARY KEY,
+    id_persona       INTEGER NOT NULL,
+    id_discapacidad  INTEGER NOT NULL,
+    fecha_diagnostico DATE,
+    CONSTRAINT fk_pd_pers_disc FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_pd_disc_base FOREIGN KEY (id_discapacidad) REFERENCES Discapacidad(id_discapacidad)
+);
+
+CREATE TABLE Domicilio (
+    id_domicilio     INTEGER NOT NULL PRIMARY KEY,
+    id_persona       INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    direccion        VARCHAR(250),
+    zona             VARCHAR(20),
+    referencia       VARCHAR(250),
+    es_actual        SMALLINT DEFAULT 1,
+    fecha_inicio     DATE,
+    fecha_fin        DATE,
+    CONSTRAINT fk_dom_pers FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_dom_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Contacto (
+    id_contacto    INTEGER NOT NULL PRIMARY KEY,
+    id_persona     INTEGER NOT NULL,
+    tipo_contacto  VARCHAR(30),
+    valor_contacto VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_cont_pers FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Escolaridad_Persona (
+    id_escolaridad     INTEGER NOT NULL PRIMARY KEY,
+    id_persona         INTEGER NOT NULL,
+    id_nivel_educativo INTEGER NOT NULL,
+    id_institucion_edu INTEGER,
+    anio_aprobacion    INTEGER,
+    completado         SMALLINT DEFAULT 0,
+    CONSTRAINT fk_esc_pers_base  FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_esc_nivel FOREIGN KEY (id_nivel_educativo) REFERENCES Nivel_Educativo(id_nivel_educativo),
+    CONSTRAINT fk_esc_ie    FOREIGN KEY (id_institucion_edu) REFERENCES Institucion_Educativa(id_institucion_edu)
+);
+
+CREATE TABLE Ocupacion (
+    id_ocupacion    INTEGER NOT NULL PRIMARY KEY,
+    nombre_ocupacion VARCHAR(150) NOT NULL,
+    codigo_ciuo      VARCHAR(10)
+);
+
+CREATE TABLE Tipo_Empleo (
+    id_tipo_empleo   INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo      VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Condicion_Laboral (
+    id_cond_laboral     INTEGER NOT NULL PRIMARY KEY,
+    nombre_cond_laboral VARCHAR(60) NOT NULL,
+    es_formal           SMALLINT DEFAULT 0
+);
+
+CREATE TABLE Empleo_Persona (
+    id_empleo        INTEGER NOT NULL PRIMARY KEY,
+    id_persona       INTEGER NOT NULL,
+    id_ocupacion     INTEGER,
+    id_tipo_empleo   INTEGER,
+    id_cond_laboral  INTEGER,
+    id_sector_econ   INTEGER,
+    salario_mensual  DECIMAL(12,2),
+    fecha_inicio     DATE,
+    fecha_fin        DATE,
+    es_actual        SMALLINT DEFAULT 1,
+    CONSTRAINT fk_emp_pers_base   FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_emp_ocup   FOREIGN KEY (id_ocupacion) REFERENCES Ocupacion(id_ocupacion),
+    CONSTRAINT fk_emp_tipo   FOREIGN KEY (id_tipo_empleo) REFERENCES Tipo_Empleo(id_tipo_empleo),
+    CONSTRAINT fk_emp_cond   FOREIGN KEY (id_cond_laboral) REFERENCES Condicion_Laboral(id_cond_laboral),
+    CONSTRAINT fk_emp_sector FOREIGN KEY (id_sector_econ) REFERENCES Sector_Economico(id_sector_econ)
+);
+
+CREATE TABLE Hogar (
+    id_hogar              INTEGER NOT NULL PRIMARY KEY,
+    id_municipio          INTEGER NOT NULL,
+    id_tipo_vivienda      INTEGER,
+    id_nivel_socio        INTEGER,
+    numero_personas        INTEGER,
+    ingreso_mensual_total DECIMAL(12,2),
+    tiene_agua_potable    SMALLINT DEFAULT 0,
+    tiene_electricidad    SMALLINT DEFAULT 0,
+    tiene_drenaje         SMALLINT DEFAULT 0,
+    CONSTRAINT fk_hog_muni   FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hog_tv     FOREIGN KEY (id_tipo_vivienda) REFERENCES Tipo_Vivienda(id_tipo_vivienda),
+    CONSTRAINT fk_hog_socio  FOREIGN KEY (id_nivel_socio) REFERENCES Nivel_Socioeconomico(id_nivel_socio)
+);
+
+CREATE TABLE Persona_Hogar (
+    id_persona_hogar INTEGER NOT NULL PRIMARY KEY,
+    id_persona        INTEGER NOT NULL,
+    id_hogar          INTEGER NOT NULL,
+    parentesco        VARCHAR(60),
+    es_jefe_hogar    SMALLINT DEFAULT 0,
+    CONSTRAINT fk_ph_pers_base FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_ph_hog  FOREIGN KEY (id_hogar) REFERENCES Hogar(id_hogar)
+);
+
+/* =============================================================================
+   5. DENUNCIAS (transversal)
+   ============================================================================= */
+
+CREATE TABLE Eje_Violencia (
+    id_eje_violencia INTEGER NOT NULL PRIMARY KEY,
+    nombre_eje        VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Tipo_Denuncia (
+    id_tipo_denuncia INTEGER NOT NULL PRIMARY KEY,
+    id_eje_violencia INTEGER NOT NULL,
+    nombre_tipo      VARCHAR(150) NOT NULL,
+    descripcion      VARCHAR(300),
+    CONSTRAINT fk_td_eje FOREIGN KEY (id_eje_violencia) REFERENCES Eje_Violencia(id_eje_violencia)
+);
+
+CREATE TABLE Institucion_Reportante (
+    id_inst_reporte    INTEGER NOT NULL PRIMARY KEY,
+    nombre_institucion VARCHAR(150) NOT NULL,
+    siglas             VARCHAR(20)
+);
+
+CREATE TABLE Estado_Denuncia (
+    id_estado_denuncia INTEGER NOT NULL PRIMARY KEY,
+    nombre_estado      VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Denuncia (
+    id_denuncia           INTEGER NOT NULL PRIMARY KEY,
+    id_tipo_denuncia      INTEGER NOT NULL,
+    id_municipio          INTEGER NOT NULL,
+    id_inst_reporte       INTEGER,
+    id_estado_denuncia    INTEGER,
+    fecha_denuncia        DATE NOT NULL,
+    fecha_resolucion      DATE,
+    descripcion_hechos    BLOB SUB_TYPE TEXT,
+    fue_procesada         SMALLINT DEFAULT 0,
+    CONSTRAINT fk_den_tipo     FOREIGN KEY (id_tipo_denuncia) REFERENCES Tipo_Denuncia(id_tipo_denuncia),
+    CONSTRAINT fk_den_muni     FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_den_inst     FOREIGN KEY (id_inst_reporte) REFERENCES Institucion_Reportante(id_inst_reporte),
+    CONSTRAINT fk_den_estado   FOREIGN KEY (id_estado_denuncia) REFERENCES Estado_Denuncia(id_estado_denuncia)
+);
+
+CREATE TABLE Persona_Denuncia (
+    id_persona_denuncia INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia         INTEGER NOT NULL,
+    id_persona          INTEGER NOT NULL,
+    rol                 VARCHAR(30) NOT NULL,
+    CONSTRAINT fk_pd_den_rel  FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_pd_pers_rel FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Seguimiento_Denuncia (
+    id_seguim_denuncia  INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia         INTEGER NOT NULL,
+    id_estado_denuncia  INTEGER NOT NULL,
+    fecha_cambio         DATE NOT NULL,
+    observaciones        VARCHAR(500),
+    CONSTRAINT fk_sd_den  FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_sd_estado FOREIGN KEY (id_estado_denuncia) REFERENCES Estado_Denuncia(id_estado_denuncia)
+);
+
+/* =============================================================================
+   6. HECHOS DELICTIVOS
+   ============================================================================= */
+
+CREATE TABLE Clasificacion_Delito (
+    id_clasif_delito INTEGER NOT NULL PRIMARY KEY,
+    nombre_clasif    VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Tipo_Hecho_Delictivo (
+    id_tipo_hecho    INTEGER NOT NULL PRIMARY KEY,
+    id_clasif_delito INTEGER NOT NULL,
+    nombre_tipo      VARCHAR(150) NOT NULL,
+    descripcion      VARCHAR(300),
+    CONSTRAINT fk_th_clasif FOREIGN KEY (id_clasif_delito) REFERENCES Clasificacion_Delito(id_clasif_delito)
+);
+
+CREATE TABLE Lugar_Ocurrencia (
+    id_lugar_ocurr INTEGER NOT NULL PRIMARY KEY,
+    nombre_lugar   VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Hecho_Delictivo (
+    id_hecho             INTEGER NOT NULL PRIMARY KEY,
+    id_tipo_hecho        INTEGER NOT NULL,
+    id_municipio         INTEGER NOT NULL,
+    id_lugar_ocurr       INTEGER,
+    fecha_hecho          DATE NOT NULL,
+    hora_hecho           TIME,
+    descripcion          BLOB SUB_TYPE TEXT,
+    fue_resuelto         SMALLINT DEFAULT 0,
+    cantidad_victimas    INTEGER DEFAULT 0,
+    cantidad_agresores    INTEGER DEFAULT 0,
+    CONSTRAINT fk_hd_tipo  FOREIGN KEY (id_tipo_hecho) REFERENCES Tipo_Hecho_Delictivo(id_tipo_hecho),
+    CONSTRAINT fk_hd_muni  FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hd_lugar FOREIGN KEY (id_lugar_ocurr) REFERENCES Lugar_Ocurrencia(id_lugar_ocurr)
+);
+
+CREATE TABLE Arma_Utilizada (
+    id_arma      INTEGER NOT NULL PRIMARY KEY,
+    nombre_arma  VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Hecho_Arma (
+    id_hecho_arma INTEGER NOT NULL PRIMARY KEY,
+    id_hecho      INTEGER NOT NULL,
+    id_arma       INTEGER NOT NULL,
+    CONSTRAINT fk_ha_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho),
+    CONSTRAINT fk_ha_arma  FOREIGN KEY (id_arma) REFERENCES Arma_Utilizada(id_arma)
+);
+
+CREATE TABLE Movil_Delito (
+    id_movil      INTEGER NOT NULL PRIMARY KEY,
+    nombre_movil  VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Hecho_Movil (
+    id_hecho_movil INTEGER NOT NULL PRIMARY KEY,
+    id_hecho       INTEGER NOT NULL,
+    id_movil       INTEGER NOT NULL,
+    CONSTRAINT fk_hm_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho),
+    CONSTRAINT fk_hm_movil FOREIGN KEY (id_movil) REFERENCES Movil_Delito(id_movil)
+);
+
+CREATE TABLE Victima (
+    id_victima   INTEGER NOT NULL PRIMARY KEY,
+    id_hecho     INTEGER NOT NULL,
+    id_persona   INTEGER NOT NULL,
+    estado_final VARCHAR(50),
+    CONSTRAINT fk_vic_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho),
+    CONSTRAINT fk_vic_pers_base  FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Agresor (
+    id_agresor   INTEGER NOT NULL PRIMARY KEY,
+    id_hecho     INTEGER NOT NULL,
+    id_persona   INTEGER NOT NULL,
+    capturado    SMALLINT DEFAULT 0,
+    CONSTRAINT fk_agr_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho),
+    CONSTRAINT fk_agr_pers_base  FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+/* =============================================================================
+   7. FORENSE (Necropsias y Exhumaciones)
+   ============================================================================= */
+
+CREATE TABLE Laboratorio_Forense (
+    id_lab_forense   INTEGER NOT NULL PRIMARY KEY,
+    id_municipio     INTEGER,
+    nombre_lab       VARCHAR(150) NOT NULL,
+    CONSTRAINT fk_lab_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Forense (
+    id_forense   INTEGER NOT NULL PRIMARY KEY,
+    id_lab_forense INTEGER,
+    id_persona     INTEGER,
+    numero_colegiado VARCHAR(30),
+    especialidad   VARCHAR(100),
+    CONSTRAINT fk_for_lab  FOREIGN KEY (id_lab_forense) REFERENCES Laboratorio_Forense(id_lab_forense),
+    CONSTRAINT fk_for_pers_base FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Necropsia (
+    id_necropsia   INTEGER NOT NULL PRIMARY KEY,
+    id_hecho       INTEGER NOT NULL,
+    id_victima     INTEGER,
+    id_forense     INTEGER,
+    id_lab_forense INTEGER,
+    fecha_necropsia DATE,
+    causa_muerte   VARCHAR(250),
+    hallazgos      BLOB SUB_TYPE TEXT,
+    CONSTRAINT fk_nec_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho),
+    CONSTRAINT fk_nec_vic   FOREIGN KEY (id_victima) REFERENCES Victima(id_victima),
+    CONSTRAINT fk_nec_for   FOREIGN KEY (id_forense) REFERENCES Forense(id_forense),
+    CONSTRAINT fk_nec_lab   FOREIGN KEY (id_lab_forense) REFERENCES Laboratorio_Forense(id_lab_forense)
+);
+
+CREATE TABLE Exhumacion (
+    id_exhumacion   INTEGER NOT NULL PRIMARY KEY,
+    id_necropsia    INTEGER,
+    id_forense      INTEGER,
+    id_municipio    INTEGER,
+    fecha_exhumacion DATE,
+    motivo          VARCHAR(300),
+    resultado       BLOB SUB_TYPE TEXT,
+    CONSTRAINT fk_exh_nec  FOREIGN KEY (id_necropsia) REFERENCES Necropsia(id_necropsia),
+    CONSTRAINT fk_exh_for  FOREIGN KEY (id_forense) REFERENCES Forense(id_forense),
+    CONSTRAINT fk_exh_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+/* =============================================================================
+   8. SENTENCIAS
+   ============================================================================= */
+
+CREATE TABLE Juzgado (
+    id_juzgado     INTEGER NOT NULL PRIMARY KEY,
+    id_municipio   INTEGER,
+    nombre_juzgado VARCHAR(150) NOT NULL,
+    tipo_juzgado   VARCHAR(80),
+    CONSTRAINT fk_jz_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Tipo_Delito_Juzgado (
+    id_tipo_delito_jz INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo       VARCHAR(200) NOT NULL,
+    articulo_legal    VARCHAR(100)
+);
+
+CREATE TABLE Pena (
+    id_pena     INTEGER NOT NULL PRIMARY KEY,
+    nombre_pena VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Sentencia (
+    id_sentencia       INTEGER NOT NULL PRIMARY KEY,
+    id_juzgado         INTEGER NOT NULL,
+    id_tipo_delito_jz  INTEGER NOT NULL,
+    id_pena            INTEGER,
+    id_hecho           INTEGER,
+    fecha_sentencia    DATE NOT NULL,
+    anios_prision      INTEGER,
+    monto_multa        DECIMAL(12,2),
+    es_condenatoria    SMALLINT DEFAULT 1,
+    es_firme           SMALLINT DEFAULT 0,
+    CONSTRAINT fk_sen_jz    FOREIGN KEY (id_juzgado) REFERENCES Juzgado(id_juzgado),
+    CONSTRAINT fk_sen_tipo  FOREIGN KEY (id_tipo_delito_jz) REFERENCES Tipo_Delito_Juzgado(id_tipo_delito_jz),
+    CONSTRAINT fk_sen_pena  FOREIGN KEY (id_pena) REFERENCES Pena(id_pena),
+    CONSTRAINT fk_sen_hecho FOREIGN KEY (id_hecho) REFERENCES Hecho_Delictivo(id_hecho)
+);
+
+CREATE TABLE Persona_Sentenciada (
+    id_persona_sent   INTEGER NOT NULL PRIMARY KEY,
+    id_sentencia      INTEGER NOT NULL,
+    id_persona        INTEGER NOT NULL,
+    alias_nombre      VARCHAR(100),
+    es_reincidente    SMALLINT DEFAULT 0,
+    CONSTRAINT fk_ps_sen_rel  FOREIGN KEY (id_sentencia) REFERENCES Sentencia(id_sentencia),
+    CONSTRAINT fk_ps_pers_rel FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Detalle_Sentencia (
+    id_detalle_sent   INTEGER NOT NULL PRIMARY KEY,
+    id_sentencia      INTEGER NOT NULL,
+    detalle           BLOB SUB_TYPE TEXT,
+    fuente_info       VARCHAR(200),
+    CONSTRAINT fk_ds_sen FOREIGN KEY (id_sentencia) REFERENCES Sentencia(id_sentencia)
+);
+
+/* =============================================================================
+   9. VIOLENCIA CONTRA LA MUJER
+   ============================================================================= */
+
+CREATE TABLE Tipo_Violencia_Mujer (
+    id_tipo_vm      INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_vm  VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Centro_Atencion (
+    id_centro_at     INTEGER NOT NULL PRIMARY KEY,
+    id_municipio     INTEGER,
+    nombre_centro    VARCHAR(150) NOT NULL,
+    tipo_centro      VARCHAR(100),
+    CONSTRAINT fk_ca_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Tipo_Atencion (
+    id_tipo_at     INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_at VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Hecho_Violencia_Mujer (
+    id_hecho_vm     INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia     INTEGER,
+    id_tipo_vm      INTEGER NOT NULL,
+    id_municipio    INTEGER NOT NULL,
+    id_victima_pers INTEGER NOT NULL,
+    id_agresor_pers INTEGER,
+    fecha_hecho     DATE NOT NULL,
+    edad_victima    INTEGER,
+    CONSTRAINT fk_hvm_den  FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_hvm_tvm  FOREIGN KEY (id_tipo_vm) REFERENCES Tipo_Violencia_Mujer(id_tipo_vm),
+    CONSTRAINT fk_hvm_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hvm_vic_p  FOREIGN KEY (id_victima_pers) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_hvm_agr_p  FOREIGN KEY (id_agresor_pers) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Atencion_Mujer (
+    id_atencion_m   INTEGER NOT NULL PRIMARY KEY,
+    id_hecho_vm     INTEGER NOT NULL,
+    id_centro_at    INTEGER NOT NULL,
+    id_tipo_at      INTEGER NOT NULL,
+    fecha_atencion  DATE NOT NULL,
+    observaciones    VARCHAR(500),
+    CONSTRAINT fk_am_hvm FOREIGN KEY (id_hecho_vm) REFERENCES Hecho_Violencia_Mujer(id_hecho_vm),
+    CONSTRAINT fk_am_ca  FOREIGN KEY (id_centro_at) REFERENCES Centro_Atencion(id_centro_at),
+    CONSTRAINT fk_am_ta  FOREIGN KEY (id_tipo_at) REFERENCES Tipo_Atencion(id_tipo_at)
+);
+
+/* =============================================================================
+   10. VIOLENCIA INTRAFAMILIAR
+   ============================================================================= */
+
+CREATE TABLE Tipo_VIF (
+    id_tipo_vif    INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_vif VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Relacion_Agresor_Victima (
+    id_rel_agr_vict INTEGER NOT NULL PRIMARY KEY,
+    nombre_relacion VARCHAR(80) NOT NULL
+);
+
+CREATE TABLE Hecho_VIF (
+    id_hecho_vif     INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia      INTEGER,
+    id_tipo_vif      INTEGER NOT NULL,
+    id_rel_agr_vict  INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    id_victima_pers  INTEGER NOT NULL,
+    id_agresor_pers  INTEGER,
+    fecha_hecho      DATE NOT NULL,
+    edad_victima     INTEGER,
+    numero_incidentes_previos INTEGER DEFAULT 0,
+    CONSTRAINT fk_hvif_den   FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_hvif_tipo  FOREIGN KEY (id_tipo_vif) REFERENCES Tipo_VIF(id_tipo_vif),
+    CONSTRAINT fk_hvif_rel   FOREIGN KEY (id_rel_agr_vict) REFERENCES Relacion_Agresor_Victima(id_rel_agr_vict),
+    CONSTRAINT fk_hvif_muni  FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hvif_vic_p   FOREIGN KEY (id_victima_pers) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_hvif_agr_p   FOREIGN KEY (id_agresor_pers) REFERENCES Persona(id_persona)
+);
+
+/* =============================================================================
+   11. VIOLENCIA INFANTIL, TRABAJO INFANTIL, EMBARAZOS
+   ============================================================================= */
+
+CREATE TABLE Tipo_Violencia_Infantil (
+    id_tipo_vi    INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_vi VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Hecho_Violencia_Infantil (
+    id_hecho_vi      INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia      INTEGER,
+    id_tipo_vi       INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    id_victima_pers  INTEGER NOT NULL,
+    id_agresor_pers  INTEGER,
+    fecha_hecho      DATE NOT NULL,
+    edad_victima     INTEGER,
+    esta_escolarizado SMALLINT DEFAULT 0,
+    CONSTRAINT fk_hvi_den   FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_hvi_tipo  FOREIGN KEY (id_tipo_vi) REFERENCES Tipo_Violencia_Infantil(id_tipo_vi),
+    CONSTRAINT fk_hvi_muni  FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hvi_vic_p   FOREIGN KEY (id_victima_pers) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_hvi_agr_p   FOREIGN KEY (id_agresor_pers) REFERENCES Persona(id_persona)
+);
+
+CREATE TABLE Sector_Trabajo_Infantil (
+    id_sector_ti     INTEGER NOT NULL PRIMARY KEY,
+    nombre_sector_ti VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Tipo_Trabajo_Infantil (
+    id_tipo_ti      INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_ti  VARCHAR(100) NOT NULL,
+    es_peligroso    SMALLINT DEFAULT 0
+);
+
+CREATE TABLE Jornada_Trabajo_Infantil (
+    id_jornada_ti      INTEGER NOT NULL PRIMARY KEY,
+    nombre_jornada      VARCHAR(50) NOT NULL,
+    horas_semanales    INTEGER
+);
+
+CREATE TABLE Trabajo_Infantil (
+    id_trabajo_inf   INTEGER NOT NULL PRIMARY KEY,
+    id_persona       INTEGER NOT NULL,
+    id_sector_ti     INTEGER NOT NULL,
+    id_tipo_ti       INTEGER NOT NULL,
+    id_jornada_ti    INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    edad_inicio      INTEGER,
+    asiste_escuela   SMALLINT DEFAULT 0,
+    recibe_pago      SMALLINT DEFAULT 0,
+    pago_mensual     DECIMAL(10,2),
+    CONSTRAINT fk_ti_pers_base    FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_ti_sector  FOREIGN KEY (id_sector_ti) REFERENCES Sector_Trabajo_Infantil(id_sector_ti),
+    CONSTRAINT fk_ti_tipo    FOREIGN KEY (id_tipo_ti) REFERENCES Tipo_Trabajo_Infantil(id_tipo_ti),
+    CONSTRAINT fk_ti_jornada FOREIGN KEY (id_jornada_ti) REFERENCES Jornada_Trabajo_Infantil(id_jornada_ti),
+    CONSTRAINT fk_ti_muni    FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Embarazo_Adolescente (
+    id_embarazo_ado   INTEGER NOT NULL PRIMARY KEY,
+    id_municipio      INTEGER NOT NULL,
+    id_grupo_etario   INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    fuente            VARCHAR(100) DEFAULT 'OSAR',
+    CONSTRAINT fk_ea_muni  FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_ea_ge    FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario)
+);
+
+CREATE TABLE Control_Prenatal (
+    id_control_pren  INTEGER NOT NULL PRIMARY KEY,
+    id_embarazo_ado  INTEGER,
+    id_persona       INTEGER,
+    fecha_control    DATE,
+    numero_control   INTEGER,
+    observaciones    VARCHAR(500),
+    CONSTRAINT fk_cp_ea   FOREIGN KEY (id_embarazo_ado) REFERENCES Embarazo_Adolescente(id_embarazo_ado),
+    CONSTRAINT fk_cp_pers_base FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+/* =============================================================================
+   12. VIOLENCIA ESTRUCTURAL / DISCRIMINACIÓN
+   ============================================================================= */
+
+CREATE TABLE Tipo_Discriminacion (
+    id_tipo_disc    INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_disc VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Grupo_Poblacional (
+    id_grupo_pob    INTEGER NOT NULL PRIMARY KEY,
+    nombre_grupo    VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Hecho_Discriminacion (
+    id_hecho_disc    INTEGER NOT NULL PRIMARY KEY,
+    id_denuncia      INTEGER,
+    id_tipo_disc     INTEGER NOT NULL,
+    id_grupo_pob     INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    id_victima_pers  INTEGER,
+    fecha_hecho      DATE NOT NULL,
+    fue_procesado    SMALLINT DEFAULT 0,
+    descripcion      BLOB SUB_TYPE TEXT,
+    CONSTRAINT fk_hdi_den   FOREIGN KEY (id_denuncia) REFERENCES Denuncia(id_denuncia),
+    CONSTRAINT fk_hdi_tipo  FOREIGN KEY (id_tipo_disc) REFERENCES Tipo_Discriminacion(id_tipo_disc),
+    CONSTRAINT fk_hdi_grupo FOREIGN KEY (id_grupo_pob) REFERENCES Grupo_Poblacional(id_grupo_pob),
+    CONSTRAINT fk_hdi_muni  FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_hdi_vic_p   FOREIGN KEY (id_victima_pers) REFERENCES Persona(id_persona)
+);
+
+/* =============================================================================
+   13. FALTAS JUDICIALES (LEVES)
+   ============================================================================= */
+
+CREATE TABLE Tipo_Falta_Judicial (
+    id_tipo_falta    INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_falta VARCHAR(150) NOT NULL,
+    articulo_legal    VARCHAR(100)
+);
+
+CREATE TABLE Sancion_Falta (
+    id_sancion    INTEGER NOT NULL PRIMARY KEY,
+    nombre_sancion VARCHAR(100) NOT NULL,
+    monto_min     DECIMAL(10,2),
+    monto_max     DECIMAL(10,2)
+);
+
+CREATE TABLE Falta_Judicial (
+    id_falta_jud    INTEGER NOT NULL PRIMARY KEY,
+    id_tipo_falta   INTEGER NOT NULL,
+    id_sancion      INTEGER,
+    id_municipio    INTEGER NOT NULL,
+    id_persona      INTEGER NOT NULL,
+    fecha_falta     DATE NOT NULL,
+    descripcion     VARCHAR(500),
+    CONSTRAINT fk_fj_tipo FOREIGN KEY (id_tipo_falta) REFERENCES Tipo_Falta_Judicial(id_tipo_falta),
+    CONSTRAINT fk_fj_san  FOREIGN KEY (id_sancion) REFERENCES Sancion_Falta(id_sancion),
+    CONSTRAINT fk_fj_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_fj_pers_base FOREIGN KEY (id_persona) REFERENCES Persona(id_persona)
+);
+
+/* =============================================================================
+   14. SALUD PÚBLICA
+   ============================================================================= */
+
+CREATE TABLE Capitulo_CIE10 (
+    id_cap_cie10     INTEGER NOT NULL PRIMARY KEY,
+    codigo_capitulo  VARCHAR(10) NOT NULL,
+    nombre_capitulo  VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE CIE10 (
+    id_cie10       INTEGER NOT NULL PRIMARY KEY,
+    id_cap_cie10   INTEGER NOT NULL,
+    codigo_cie10   VARCHAR(10) NOT NULL,
+    nombre_diag    VARCHAR(250) NOT NULL,
+    CONSTRAINT fk_cie_cap FOREIGN KEY (id_cap_cie10) REFERENCES Capitulo_CIE10(id_cap_cie10)
+);
+
+CREATE TABLE Categoria_Indicador (
+    id_cat_indic     INTEGER NOT NULL PRIMARY KEY,
+    nombre_categoria VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Indicador_Salud (
+    id_indicador      INTEGER NOT NULL PRIMARY KEY,
+    id_cat_indic      INTEGER NOT NULL,
+    nombre_indicador  VARCHAR(150) NOT NULL,
+    unidad_medida     VARCHAR(50),
+    CONSTRAINT fk_ind_cat FOREIGN KEY (id_cat_indic) REFERENCES Categoria_Indicador(id_cat_indic)
+);
+
+CREATE TABLE Tipo_Centro_Salud (
+    id_tipo_centro_s  INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo       VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Centro_Salud (
+    id_centro_salud   INTEGER NOT NULL PRIMARY KEY,
+    id_tipo_centro_s  INTEGER NOT NULL,
+    id_municipio      INTEGER NOT NULL,
+    nombre_centro     VARCHAR(150) NOT NULL,
+    es_publico        SMALLINT DEFAULT 1,
+    CONSTRAINT fk_cs_tipo FOREIGN KEY (id_tipo_centro_s) REFERENCES Tipo_Centro_Salud(id_tipo_centro_s),
+    CONSTRAINT fk_cs_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio)
+);
+
+CREATE TABLE Registro_Salud (
+    id_reg_salud     INTEGER NOT NULL PRIMARY KEY,
+    id_indicador     INTEGER NOT NULL,
+    id_municipio     INTEGER NOT NULL,
+    id_grupo_etario  INTEGER NOT NULL,
+    id_sexo          INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    fuente            VARCHAR(100) DEFAULT 'MSPAS',
+    CONSTRAINT fk_rs_ind    FOREIGN KEY (id_indicador) REFERENCES Indicador_Salud(id_indicador),
+    CONSTRAINT fk_rs_muni   FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_rs_ge     FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario),
+    CONSTRAINT fk_rs_sexo   FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo)
+);
+
+CREATE TABLE Registro_Desnutricion (
+    id_reg_desnut    INTEGER NOT NULL PRIMARY KEY,
+    id_municipio     INTEGER NOT NULL,
+    id_grupo_etario  INTEGER NOT NULL,
+    id_sexo          INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    tipo_desnutricion VARCHAR(30) NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    CONSTRAINT fk_rd_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_rd_ge    FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario),
+    CONSTRAINT fk_rd_sexo FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo)
+);
+
+CREATE TABLE Registro_Enfermedad_Cronica (
+    id_reg_cronica   INTEGER NOT NULL PRIMARY KEY,
+    id_cie10          INTEGER NOT NULL,
+    id_municipio      INTEGER NOT NULL,
+    id_grupo_etario  INTEGER NOT NULL,
+    id_sexo          INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    CONSTRAINT fk_rec_cie  FOREIGN KEY (id_cie10) REFERENCES CIE10(id_cie10),
+    CONSTRAINT fk_rec_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_rec_ge    FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario),
+    CONSTRAINT fk_rec_sexo FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo)
+);
+
+CREATE TABLE Vector_Enfermedad (
+    id_vector     INTEGER NOT NULL PRIMARY KEY,
+    nombre_vector VARCHAR(100) NOT NULL,
+    tipo_vector    VARCHAR(50)
+);
+
+CREATE TABLE Registro_Enfermedad_Vector (
+    id_reg_vector    INTEGER NOT NULL PRIMARY KEY,
+    id_vector        INTEGER,
+    id_municipio      INTEGER NOT NULL,
+    id_grupo_etario  INTEGER NOT NULL,
+    id_sexo          INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    nombre_enfermedad VARCHAR(50) NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    CONSTRAINT fk_rv_vec  FOREIGN KEY (id_vector) REFERENCES Vector_Enfermedad(id_vector),
+    CONSTRAINT fk_rv_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_rv_ge    FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario),
+    CONSTRAINT fk_rv_sexo FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo)
+);
+
+CREATE TABLE Complicacion_Embarazo (
+    id_complic_emb      INTEGER NOT NULL PRIMARY KEY,
+    nombre_complicacion VARCHAR(150) NOT NULL,
+    id_cie10            INTEGER,
+    CONSTRAINT fk_ce_cie FOREIGN KEY (id_cie10) REFERENCES CIE10(id_cie10)
+);
+
+CREATE TABLE Registro_Morbilidad_Materna (
+    id_reg_morbi    INTEGER NOT NULL PRIMARY KEY,
+    id_complic_emb  INTEGER NOT NULL,
+    id_municipio    INTEGER NOT NULL,
+    id_grupo_etario INTEGER NOT NULL,
+    anio              INTEGER NOT NULL,
+    cantidad_casos    INTEGER NOT NULL,
+    muertes_maternas INTEGER DEFAULT 0,
+    CONSTRAINT fk_rm_ce    FOREIGN KEY (id_complic_emb) REFERENCES Complicacion_Embarazo(id_complic_emb),
+    CONSTRAINT fk_rm_muni FOREIGN KEY (id_municipio) REFERENCES Municipio(id_municipio),
+    CONSTRAINT fk_rm_ge    FOREIGN KEY (id_grupo_etario) REFERENCES Grupo_Etario(id_grupo_etario)
+);
+
+/* =============================================================================
+   15. ENCUESTAS
+   ============================================================================= */
+
+CREATE TABLE Tipo_Encuesta (
+    id_tipo_enc    INTEGER NOT NULL PRIMARY KEY,
+    nombre_tipo_enc VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Encuesta (
+    id_encuesta    INTEGER NOT NULL PRIMARY KEY,
+    id_tipo_enc    INTEGER NOT NULL,
+    id_persona     INTEGER,
+    id_hogar       INTEGER,
+    fecha_encuesta DATE,
+    CONSTRAINT fk_enc_tipo  FOREIGN KEY (id_tipo_enc) REFERENCES Tipo_Encuesta(id_tipo_enc),
+    CONSTRAINT fk_enc_pers_base  FOREIGN KEY (id_persona) REFERENCES Persona(id_persona),
+    CONSTRAINT fk_enc_hog   FOREIGN KEY (id_hogar) REFERENCES Hogar(id_hogar)
+);
+
+CREATE TABLE Respuesta_Encuesta (
+    id_resp_encuesta INTEGER NOT NULL PRIMARY KEY,
+    id_encuesta      INTEGER NOT NULL,
+    pregunta         VARCHAR(250) NOT NULL,
+    respuesta        VARCHAR(500),
+    CONSTRAINT fk_re_enc FOREIGN KEY (id_encuesta) REFERENCES Encuesta(id_encuesta)
+);
+
+COMMIT;
+
+/* =============================================================================
+   16. TRIGGERS BEFORE INSERT (autoincrement)
+   ============================================================================= */
+
+SET TERM ^ ;
+
+CREATE TRIGGER trg_pais_bi FOR Pais ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_pais IS NULL) THEN NEW.id_pais = NEXT VALUE FOR seq_pais; END^
+
+CREATE TRIGGER trg_region_bi FOR Region ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_region IS NULL) THEN NEW.id_region = NEXT VALUE FOR seq_region; END^
+
+CREATE TRIGGER trg_depto_bi FOR Departamento ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_departamento IS NULL) THEN NEW.id_departamento = NEXT VALUE FOR seq_departamento; END^
+
+CREATE TRIGGER trg_muni_bi FOR Municipio ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_municipio IS NULL) THEN NEW.id_municipio = NEXT VALUE FOR seq_municipio; END^
+
+CREATE TRIGGER trg_area_bi FOR Area_Geografica ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_area_geo IS NULL) THEN NEW.id_area_geo = NEXT VALUE FOR seq_area_geo; END^
+
+CREATE TRIGGER trg_sexo_bi FOR Sexo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_sexo IS NULL) THEN NEW.id_sexo = NEXT VALUE FOR seq_sexo; END^
+
+CREATE TRIGGER trg_etnia_bi FOR Etnia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_etnia IS NULL) THEN NEW.id_etnia = NEXT VALUE FOR seq_etnia; END^
+
+CREATE TRIGGER trg_idioma_bi FOR Idioma ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_idioma IS NULL) THEN NEW.id_idioma = NEXT VALUE FOR seq_idioma; END^
+
+CREATE TRIGGER trg_ec_bi FOR Estado_Civil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_estado_civil IS NULL) THEN NEW.id_estado_civil = NEXT VALUE FOR seq_estado_civil; END^
+
+CREATE TRIGGER trg_rel_bi FOR Religion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_religion IS NULL) THEN NEW.id_religion = NEXT VALUE FOR seq_religion; END^
+
+CREATE TRIGGER trg_disc_bi FOR Discapacidad ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_discapacidad IS NULL) THEN NEW.id_discapacidad = NEXT VALUE FOR seq_discapacidad; END^
+
+CREATE TRIGGER trg_ge_bi FOR Grupo_Etario ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_grupo_etario IS NULL) THEN NEW.id_grupo_etario = NEXT VALUE FOR seq_grupo_etario; END^
+
+CREATE TRIGGER trg_ne_bi FOR Nivel_Educativo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_nivel_educativo IS NULL) THEN NEW.id_nivel_educativo = NEXT VALUE FOR seq_nivel_educativo; END^
+
+CREATE TRIGGER trg_ie_bi FOR Institucion_Educativa ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_institucion_edu IS NULL) THEN NEW.id_institucion_edu = NEXT VALUE FOR seq_institucion_edu; END^
+
+CREATE TRIGGER trg_tv_bi FOR Tipo_Vivienda ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_vivienda IS NULL) THEN NEW.id_tipo_vivienda = NEXT VALUE FOR seq_tipo_vivienda; END^
+
+CREATE TRIGGER trg_ns_bi FOR Nivel_Socioeconomico ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_nivel_socio IS NULL) THEN NEW.id_nivel_socio = NEXT VALUE FOR seq_nivel_socio; END^
+
+CREATE TRIGGER trg_se_bi FOR Sector_Economico ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_sector_econ IS NULL) THEN NEW.id_sector_econ = NEXT VALUE FOR seq_sector_econ; END^
+
+CREATE TRIGGER trg_pers_bi FOR Persona ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona IS NULL) THEN NEW.id_persona = NEXT VALUE FOR seq_persona; END^
+
+CREATE TRIGGER trg_pi_bi FOR Persona_Idioma ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona_idioma IS NULL) THEN NEW.id_persona_idioma = NEXT VALUE FOR seq_persona_idioma; END^
+
+CREATE TRIGGER trg_pd_bi FOR Persona_Discapacidad ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona_disc IS NULL) THEN NEW.id_persona_disc = NEXT VALUE FOR seq_persona_disc; END^
+
+CREATE TRIGGER trg_dom_bi FOR Domicilio ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_domicilio IS NULL) THEN NEW.id_domicilio = NEXT VALUE FOR seq_domicilio; END^
+
+CREATE TRIGGER trg_cont_bi FOR Contacto ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_contacto IS NULL) THEN NEW.id_contacto = NEXT VALUE FOR seq_contacto; END^
+
+CREATE TRIGGER trg_esc_bi FOR Escolaridad_Persona ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_escolaridad IS NULL) THEN NEW.id_escolaridad = NEXT VALUE FOR seq_escolaridad; END^
+
+CREATE TRIGGER trg_ocup_bi FOR Ocupacion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_ocupacion IS NULL) THEN NEW.id_ocupacion = NEXT VALUE FOR seq_ocupacion; END^
+
+CREATE TRIGGER trg_te_bi FOR Tipo_Empleo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_empleo IS NULL) THEN NEW.id_tipo_empleo = NEXT VALUE FOR seq_tipo_empleo; END^
+
+CREATE TRIGGER trg_cl_bi FOR Condicion_Laboral ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_cond_laboral IS NULL) THEN NEW.id_cond_laboral = NEXT VALUE FOR seq_cond_laboral; END^
+
+CREATE TRIGGER trg_emp_bi FOR Empleo_Persona ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_empleo IS NULL) THEN NEW.id_empleo = NEXT VALUE FOR seq_empleo; END^
+
+CREATE TRIGGER trg_hog_bi FOR Hogar ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hogar IS NULL) THEN NEW.id_hogar = NEXT VALUE FOR seq_hogar; END^
+
+CREATE TRIGGER trg_ph_bi FOR Persona_Hogar ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona_hogar IS NULL) THEN NEW.id_persona_hogar = NEXT VALUE FOR seq_persona_hogar; END^
+
+CREATE TRIGGER trg_ev_bi FOR Eje_Violencia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_eje_violencia IS NULL) THEN NEW.id_eje_violencia = NEXT VALUE FOR seq_eje_violencia; END^
+
+CREATE TRIGGER trg_td_bi FOR Tipo_Denuncia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_denuncia IS NULL) THEN NEW.id_tipo_denuncia = NEXT VALUE FOR seq_tipo_denuncia; END^
+
+CREATE TRIGGER trg_ir_bi FOR Institucion_Reportante ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_inst_reporte IS NULL) THEN NEW.id_inst_reporte = NEXT VALUE FOR seq_inst_reporte; END^
+
+CREATE TRIGGER trg_ed_bi FOR Estado_Denuncia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_estado_denuncia IS NULL) THEN NEW.id_estado_denuncia = NEXT VALUE FOR seq_estado_denuncia; END^
+
+CREATE TRIGGER trg_den_bi FOR Denuncia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_denuncia IS NULL) THEN NEW.id_denuncia = NEXT VALUE FOR seq_denuncia; END^
+
+CREATE TRIGGER trg_pden_bi FOR Persona_Denuncia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona_denuncia IS NULL) THEN NEW.id_persona_denuncia = NEXT VALUE FOR seq_persona_denuncia; END^
+
+CREATE TRIGGER trg_sd_bi FOR Seguimiento_Denuncia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_seguim_denuncia IS NULL) THEN NEW.id_seguim_denuncia = NEXT VALUE FOR seq_seguim_denuncia; END^
+
+CREATE TRIGGER trg_cd_bi FOR Clasificacion_Delito ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_clasif_delito IS NULL) THEN NEW.id_clasif_delito = NEXT VALUE FOR seq_clasif_delito; END^
+
+CREATE TRIGGER trg_th_bi FOR Tipo_Hecho_Delictivo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_hecho IS NULL) THEN NEW.id_tipo_hecho = NEXT VALUE FOR seq_tipo_hecho; END^
+
+CREATE TRIGGER trg_lo_bi FOR Lugar_Ocurrencia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_lugar_ocurr IS NULL) THEN NEW.id_lugar_ocurr = NEXT VALUE FOR seq_lugar_ocurr; END^
+
+CREATE TRIGGER trg_hecho_bi FOR Hecho_Delictivo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho IS NULL) THEN NEW.id_hecho = NEXT VALUE FOR seq_hecho; END^
+
+CREATE TRIGGER trg_arma_bi FOR Arma_Utilizada ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_arma IS NULL) THEN NEW.id_arma = NEXT VALUE FOR seq_arma; END^
+
+CREATE TRIGGER trg_ha_bi FOR Hecho_Arma ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_arma IS NULL) THEN NEW.id_hecho_arma = NEXT VALUE FOR seq_hecho_arma; END^
+
+CREATE TRIGGER trg_mov_bi FOR Movil_Delito ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_movil IS NULL) THEN NEW.id_movil = NEXT VALUE FOR seq_movil; END^
+
+CREATE TRIGGER trg_hm_bi FOR Hecho_Movil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_movil IS NULL) THEN NEW.id_hecho_movil = NEXT VALUE FOR seq_hecho_movil; END^
+
+CREATE TRIGGER trg_vic_bi FOR Victima ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_victima IS NULL) THEN NEW.id_victima = NEXT VALUE FOR seq_victima; END^
+
+CREATE TRIGGER trg_agr_bi FOR Agresor ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_agresor IS NULL) THEN NEW.id_agresor = NEXT VALUE FOR seq_agresor; END^
+
+CREATE TRIGGER trg_lab_bi FOR Laboratorio_Forense ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_lab_forense IS NULL) THEN NEW.id_lab_forense = NEXT VALUE FOR seq_lab_forense; END^
+
+CREATE TRIGGER trg_for_bi FOR Forense ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_forense IS NULL) THEN NEW.id_forense = NEXT VALUE FOR seq_forense; END^
+
+CREATE TRIGGER trg_nec_bi FOR Necropsia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_necropsia IS NULL) THEN NEW.id_necropsia = NEXT VALUE FOR seq_necropsia; END^
+
+CREATE TRIGGER trg_exh_bi FOR Exhumacion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_exhumacion IS NULL) THEN NEW.id_exhumacion = NEXT VALUE FOR seq_exhumacion; END^
+
+CREATE TRIGGER trg_jz_bi FOR Juzgado ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_juzgado IS NULL) THEN NEW.id_juzgado = NEXT VALUE FOR seq_juzgado; END^
+
+CREATE TRIGGER trg_tdj_bi FOR Tipo_Delito_Juzgado ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_delito_jz IS NULL) THEN NEW.id_tipo_delito_jz = NEXT VALUE FOR seq_tipo_delito_jz; END^
+
+CREATE TRIGGER trg_pena_bi FOR Pena ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_pena IS NULL) THEN NEW.id_pena = NEXT VALUE FOR seq_pena; END^
+
+CREATE TRIGGER trg_sen_bi FOR Sentencia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_sentencia IS NULL) THEN NEW.id_sentencia = NEXT VALUE FOR seq_sentencia; END^
+
+CREATE TRIGGER trg_ps_bi FOR Persona_Sentenciada ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_persona_sent IS NULL) THEN NEW.id_persona_sent = NEXT VALUE FOR seq_persona_sent; END^
+
+CREATE TRIGGER trg_ds_bi FOR Detalle_Sentencia ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_detalle_sent IS NULL) THEN NEW.id_detalle_sent = NEXT VALUE FOR seq_detalle_sent; END^
+
+CREATE TRIGGER trg_tvm_bi FOR Tipo_Violencia_Mujer ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_vm IS NULL) THEN NEW.id_tipo_vm = NEXT VALUE FOR seq_tipo_vm; END^
+
+CREATE TRIGGER trg_ca_bi FOR Centro_Atencion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_centro_at IS NULL) THEN NEW.id_centro_at = NEXT VALUE FOR seq_centro_at; END^
+
+CREATE TRIGGER trg_ta_bi FOR Tipo_Atencion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_at IS NULL) THEN NEW.id_tipo_at = NEXT VALUE FOR seq_tipo_at; END^
+
+CREATE TRIGGER trg_hvm_bi FOR Hecho_Violencia_Mujer ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_vm IS NULL) THEN NEW.id_hecho_vm = NEXT VALUE FOR seq_hecho_vm; END^
+
+CREATE TRIGGER trg_am_bi FOR Atencion_Mujer ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_atencion_m IS NULL) THEN NEW.id_atencion_m = NEXT VALUE FOR seq_atencion_m; END^
+
+CREATE TRIGGER trg_tvif_bi FOR Tipo_VIF ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_vif IS NULL) THEN NEW.id_tipo_vif = NEXT VALUE FOR seq_tipo_vif; END^
+
+CREATE TRIGGER trg_rav_bi FOR Relacion_Agresor_Victima ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_rel_agr_vict IS NULL) THEN NEW.id_rel_agr_vict = NEXT VALUE FOR seq_rel_agr_vict; END^
+
+CREATE TRIGGER trg_hvif_bi FOR Hecho_VIF ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_vif IS NULL) THEN NEW.id_hecho_vif = NEXT VALUE FOR seq_hecho_vif; END^
+
+CREATE TRIGGER trg_tvi_bi FOR Tipo_Violencia_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_vi IS NULL) THEN NEW.id_tipo_vi = NEXT VALUE FOR seq_tipo_vi; END^
+
+CREATE TRIGGER trg_hvi_bi FOR Hecho_Violencia_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_vi IS NULL) THEN NEW.id_hecho_vi = NEXT VALUE FOR seq_hecho_vi; END^
+
+CREATE TRIGGER trg_sti_bi FOR Sector_Trabajo_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_sector_ti IS NULL) THEN NEW.id_sector_ti = NEXT VALUE FOR seq_sector_ti; END^
+
+CREATE TRIGGER trg_tti_bi FOR Tipo_Trabajo_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_ti IS NULL) THEN NEW.id_tipo_ti = NEXT VALUE FOR seq_tipo_ti; END^
+
+CREATE TRIGGER trg_jti_bi FOR Jornada_Trabajo_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_jornada_ti IS NULL) THEN NEW.id_jornada_ti = NEXT VALUE FOR seq_jornada_ti; END^
+
+CREATE TRIGGER trg_ti_bi FOR Trabajo_Infantil ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_trabajo_inf IS NULL) THEN NEW.id_trabajo_inf = NEXT VALUE FOR seq_trabajo_inf; END^
+
+CREATE TRIGGER trg_ea_bi FOR Embarazo_Adolescente ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_embarazo_ado IS NULL) THEN NEW.id_embarazo_ado = NEXT VALUE FOR seq_embarazo_ado; END^
+
+CREATE TRIGGER trg_cp_bi FOR Control_Prenatal ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_control_pren IS NULL) THEN NEW.id_control_pren = NEXT VALUE FOR seq_control_pren; END^
+
+CREATE TRIGGER trg_tdi_bi FOR Tipo_Discriminacion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_disc IS NULL) THEN NEW.id_tipo_disc = NEXT VALUE FOR seq_tipo_disc; END^
+
+CREATE TRIGGER trg_gp_bi FOR Grupo_Poblacional ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_grupo_pob IS NULL) THEN NEW.id_grupo_pob = NEXT VALUE FOR seq_grupo_pob; END^
+
+CREATE TRIGGER trg_hdi_bi FOR Hecho_Discriminacion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_hecho_disc IS NULL) THEN NEW.id_hecho_disc = NEXT VALUE FOR seq_hecho_disc; END^
+
+CREATE TRIGGER trg_tf_bi FOR Tipo_Falta_Judicial ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_falta IS NULL) THEN NEW.id_tipo_falta = NEXT VALUE FOR seq_tipo_falta; END^
+
+CREATE TRIGGER trg_san_bi FOR Sancion_Falta ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_sancion IS NULL) THEN NEW.id_sancion = NEXT VALUE FOR seq_sancion; END^
+
+CREATE TRIGGER trg_fj_bi FOR Falta_Judicial ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_falta_jud IS NULL) THEN NEW.id_falta_jud = NEXT VALUE FOR seq_falta_jud; END^
+
+CREATE TRIGGER trg_cap_bi FOR Capitulo_CIE10 ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_cap_cie10 IS NULL) THEN NEW.id_cap_cie10 = NEXT VALUE FOR seq_cap_cie10; END^
+
+CREATE TRIGGER trg_cie_bi FOR CIE10 ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_cie10 IS NULL) THEN NEW.id_cie10 = NEXT VALUE FOR seq_cie10; END^
+
+CREATE TRIGGER trg_ci_bi FOR Categoria_Indicador ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_cat_indic IS NULL) THEN NEW.id_cat_indic = NEXT VALUE FOR seq_cat_indic; END^
+
+CREATE TRIGGER trg_ind_bi FOR Indicador_Salud ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_indicador IS NULL) THEN NEW.id_indicador = NEXT VALUE FOR seq_indicador; END^
+
+CREATE TRIGGER trg_tcs_bi FOR Tipo_Centro_Salud ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_centro_s IS NULL) THEN NEW.id_tipo_centro_s = NEXT VALUE FOR seq_tipo_centro_s; END^
+
+CREATE TRIGGER trg_cs_bi FOR Centro_Salud ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_centro_salud IS NULL) THEN NEW.id_centro_salud = NEXT VALUE FOR seq_centro_salud; END^
+
+CREATE TRIGGER trg_rs_bi FOR Registro_Salud ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_reg_salud IS NULL) THEN NEW.id_reg_salud = NEXT VALUE FOR seq_reg_salud; END^
+
+CREATE TRIGGER trg_rd_bi FOR Registro_Desnutricion ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_reg_desnut IS NULL) THEN NEW.id_reg_desnut = NEXT VALUE FOR seq_reg_desnut; END^
+
+CREATE TRIGGER trg_rec_bi FOR Registro_Enfermedad_Cronica ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_reg_cronica IS NULL) THEN NEW.id_reg_cronica = NEXT VALUE FOR seq_reg_cronica; END^
+
+CREATE TRIGGER trg_vec_bi FOR Vector_Enfermedad ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_vector IS NULL) THEN NEW.id_vector = NEXT VALUE FOR seq_vector; END^
+
+CREATE TRIGGER trg_rv_bi FOR Registro_Enfermedad_Vector ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_reg_vector IS NULL) THEN NEW.id_reg_vector = NEXT VALUE FOR seq_reg_vector; END^
+
+CREATE TRIGGER trg_ce_bi FOR Complicacion_Embarazo ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_complic_emb IS NULL) THEN NEW.id_complic_emb = NEXT VALUE FOR seq_complic_emb; END^
+
+CREATE TRIGGER trg_rm_bi FOR Registro_Morbilidad_Materna ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_reg_morbi IS NULL) THEN NEW.id_reg_morbi = NEXT VALUE FOR seq_reg_morbi; END^
+
+CREATE TRIGGER trg_tenc_bi FOR Tipo_Encuesta ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_tipo_enc IS NULL) THEN NEW.id_tipo_enc = NEXT VALUE FOR seq_tipo_enc; END^
+
+CREATE TRIGGER trg_enc_bi FOR Encuesta ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_encuesta IS NULL) THEN NEW.id_encuesta = NEXT VALUE FOR seq_encuesta; END^
+
+CREATE TRIGGER trg_re_bi FOR Respuesta_Encuesta ACTIVE BEFORE INSERT POSITION 0 AS
+BEGIN IF (NEW.id_resp_encuesta IS NULL) THEN NEW.id_resp_encuesta = NEXT VALUE FOR seq_resp_encuesta; END^
+
+SET TERM ; ^
+
+COMMIT;
+
+/* =============================================================================
+   17. ÍNDICES SECUNDARIOS (mejoran consultas frecuentes)
+   ============================================================================= */
+CREATE INDEX idx_hecho_fecha      ON Hecho_Delictivo(fecha_hecho);
+CREATE INDEX idx_hecho_muni       ON Hecho_Delictivo(id_municipio);
+CREATE INDEX idx_hecho_tipo       ON Hecho_Delictivo(id_tipo_hecho);
+CREATE INDEX idx_den_fecha        ON Denuncia(fecha_denuncia);
+CREATE INDEX idx_den_muni         ON Denuncia(id_municipio);
+CREATE INDEX idx_sen_fecha        ON Sentencia(fecha_sentencia);
+CREATE INDEX idx_rs_anio          ON Registro_Salud(anio);
+CREATE INDEX idx_rs_muni          ON Registro_Salud(id_municipio);
+CREATE INDEX idx_rv_anio          ON Registro_Enfermedad_Vector(anio);
+CREATE INDEX idx_rd_anio          ON Registro_Desnutricion(anio);
+CREATE INDEX idx_ea_anio          ON Embarazo_Adolescente(anio);
+CREATE INDEX idx_ti_anio          ON Trabajo_Infantil(anio);
+CREATE INDEX idx_hvm_fecha        ON Hecho_Violencia_Mujer(fecha_hecho);
+CREATE INDEX idx_hvif_fecha       ON Hecho_VIF(fecha_hecho);
+
+COMMIT;
+
