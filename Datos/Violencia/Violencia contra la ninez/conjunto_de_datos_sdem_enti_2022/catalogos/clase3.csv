@@ -1,0 +1,8 @@
+CVE,DESCRIP
+1,Ocupado pleno
+2,Ocupado sin pago laboral
+3,Ocupado ausente con nexo laboral
+4,Ocupado ausente con retorno asegurado
+5,Desocupados iniciadores
+6,Desocupados con búsqueda
+7,Desocupados ausentes sin ingreso y sin nexo

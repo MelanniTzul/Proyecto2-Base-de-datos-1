@@ -1,0 +1,41 @@
+Identifier: MEX-INEGI.ESD3.04-ENTI-2022
+
+Title: Encuesta Nacional de Trabajo Infantil 2022
+
+Description: La Encuesta Nacional de Trabajo Infantil (ENTI) 2022 se levantó en el cuarto trimestre de 2022 y su objetivo general es ofrecer información actualizada sobre la magnitud del trabajo infantil y las características socioeconómicas y laborales de los niños y las niñas que trabajan, así como de la población infantil que participa en las actividades domésticas no remuneradas en sus propios hogares, con la finalidad de aportar información para el diseño y seguimiento de las políticas públicas orientadas a la erradicación del trabajo infantil en el país.
+
+Objetivos específicos
+
+• Determinar la magnitud, características, causas y consecuencias de la participación de niños y niñas de 5 a 17 años en distintas formas de trabajo (económicas y no económicas). Especialmente, en el trabajo en una ocupación y el trabajo de producción no remunerado de los hogares.
+• Hacer operables las definiciones legales de trabajo infantil y trabajo peligroso en indicadores estadísticos. Para ello se toma como referencia la edad mínima de acceso al trabajo y las ocupaciones y trabajos peligrosos definidos por la LFT, para definir y medir el trabajo infantil.
+• Determinar la prevalencia del trabajo en la ocupación, en el trabajo infantil, el trabajo peligroso, los servicios domésticos no remunerados en el propio hogar y en los servicios domésticos no remunerados peligrosos por sexo, grupo de edad, área de residencia (urbana / rural) a nivel nacional y principales indicadores con desagregación por entidad federativa.
+• Evaluar la participación de niños y niñas de 5 a 17 años en una o más actividades simultáneamente: trabajo en la ocupación de forma exclusiva (sin asistir a la escuela); estudia exclusivamente (sin trabajar en la ocupación); trabaja en la ocupación y estudia; no trabaja en la ocupación ni asiste a la escuela (por sexo, grupo de edad y situación laboral).
+• Recopilar información sobre las siguientes características del trabajo: industria; situación en la ocupación; grupos de ocupación; horas de trabajo semanales en el trabajo en una ocupación; horas de trabajo semanales en actividades domésticas; horas totales dedicadas al trabajo en la ocupación y en actividades domésticas; principales tipos de tareas domésticas realizadas por los niños y las niñas; ingresos (efectivo / en especie) y cómo se gastan; razones por las que realizan el trabajo infantil; interacción entre el trabajo infantil y la educación; y determinantes del trabajo infantil.
+• Recopilar información básica sobre las características de las viviendas con niñas y niños de 5 a 17 años, la disponibilidad de servicios y de bienes en la vivienda; así como información complementaria sobre los hogares, especialmente problemas que enfrentaron en los últimos tres años y acceso a pensiones, jubilaciones y programas sociales por parte de alguno de sus integrantes. 
+
+Con este levantamiento se da continuidad a la generación de información de las actividades que realiza la población infantil, siendo el antecedente inmediato, la ENTI 2019 que dio continuidad a la captación de información que se levantaba cada dos años desde 2007 con el Módulo de Trabajo Infantil, permitiendo así, disponer de información regular sobre la evolución del trabajo infantil en México.
+
+NOTA:
+El 6 de octubre de 2023, se reemplazaron los archivos de las tablas de Conjunto de datos del cuestionario básico de 5 a 11 años (ENTI2022_05A11) y 12 a 17 años (ENTI2022_12A17), debido a una actualización en la variable Edad (EDA). Dichos ajustes están registrados en el archivo de la Bitácora de cambios.
+
+Modified: 2023-10-06
+
+Publisher: Instituto Nacional de Estadística y Geografía, INEGI
+
+Mbox: atencion.usuarios@inegi.org.mx
+
+License: https://www.inegi.org.mx/inegi/terminos.html
+
+DataDictionary: https://www.inegi.org.mx/rnm/index.php/catalog/919/data-dictionary
+
+Keyword: "accidente", "actividad", "adolescencia", "apoyo", "asistencia", "condiciones", "educación", "encuesta", "enfermedad", "escolar", "hogar", "horas", "infancia", "ingresos", "instrucción", "niño", "nivel", "ocupación", "población", "seguridad", "trabajo"
+
+ContactPoint: Mtro. J. Armando Aguiar Rodríguez, 800 111 4634
+
+Temporal: 2022-10-01-2022-12-31
+
+Spatial: Estados Unidos Mexicanos
+
+AccrualPeriodicity: Trienalmente
+
+Distribution: https://www.inegi.org.mx/programas/enti/2022/

@@ -1,0 +1,133 @@
+NOMBRE_CAMPO,LONGITUD,TIPO,NEMËNICO,CATÁLOGO,RANGO_CLAVES   
+Resultado definitivo de la entevista,2,C,r_def,r_def,"[01-15,20]"
+Estrato,2,C,est,est,"[10,20,30,40]"
+Estrato de diseño,3,C,est_d,,[001-999]
+Tamaño de localidad,1,C,t_loc,t_loc,[1-4]
+Entidad,2,C,ent,ent,[01-32]
+Control,5,C,con,,[00001-99999]
+Unidad primaria de muestreo,7,C,upm,,[0000001-9999999]
+Número progresivo de la vivienda,4,C,n_pro_viv,,[0001-9999]
+Vivienda seleccionada,2,C,v_sel,v_sel,[00-99]
+Número de hogar,1,C,n_hog,n_hog,[1-9]
+Periodo,3,C,per,per,"Primer dígito 1-4, segundo y tercer dígito año"
+Número de renglón,2,C,n_ren,n_ren,[01-30]
+Condición de residencia,1,C,c_res,c_res,[1]
+Clave de parentesco,3,C,par_c,,Catálogo de parentesco
+Sexo,1,C,sex,sex,"[1,2]"
+Edad,2,C,eda,eda,"[00-96,97,98,99]"
+Día de nacimiento,2,C,nac_dia,nac_dia,"[01-31,99]"
+Mes de nacimiento,2,C,nac_mes,nac_mes,"[01-12,99]"
+Año de nacimiento,4,C,nac_anio,nac_anio,[0001-9999]
+Lugar de nacimiento,3,C,l_nac_c,,"Catálogo de países, entidades y municipios"
+¿Sabe leer y escribir un recado?,1,C,cs_p12,cs_p12,"[1-2,9]"
+¿Hasta qué grado aprobó... en la escuela (nivel escolar),2,C,cs_p13_1,cs_p13_1,"[00-09,99]"
+Años aprobados,1,C,cs_p13_2,cs_p13_2,[0-9]
+Clave de la carrera,6,C,cs_p14_c,,Catálogo de Carreras
+¿Qué estudios le pidieron a ... para ingresar a esta carrera?,1,C,cs_p15,cs_p15,"[1-3,9]"
+¿...Terminó los estudios o materias de esta carrera?,1,C,cs_p16,cs_p16,"[1-2,9]"
+¿... Asiste actualmente a la escuela?,1,C,cs_p17,cs_p17,"[1-2,9]"
+Hijos nacidos vivos,2,C,n_hij,n_hij,"[00-25,99]"
+Estado conyugal,1,C,e_con,e_con,"[1-6,9]"
+Hace un año ¿en qué estado de la República vivía...?,1,C,cs_p20a_1,cs_p20a_1,[1-4]
+Clave de entidad o país,3,C,cs_p20a_c,,"Catálogo de países, entidades y municipios"
+¿En qué municipio vivía ... hace un año?,1,C,cs_p20b_1,cs_p20b_1,"[1,2]"
+Clave de municipio,3,C,cs_p20b_c,,"Catálogo de países, entidades y municipios"
+¿Por qué ... dejo de vivir en ese municipio o alcaldía o país?,2,C,cs_p20c_1,cs_p20c_1,[01-11]
+Zona salarial,1,N,zona,zona,"[1,2]"
+Salario mínimo mensual,4,N,salario,salario,"[5186,7810]"
+Condición de actividad primera categoría,1,N,clase1,clase1,[1-2]
+Condición de actividad segunda categoría,1,N,clase2,clase2,[1-4]
+Composición de la PEA,1,N,clase3,clase3,[1-7]
+Posición en la ocupación para ocupados,1,N,pos_ocu,pos_ocu,[1-5]
+Condición de acceso a las instituciones de salud,1,N,seg_soc,seg_soc,[1-3]
+Sector de actividad económica para ocupados,1,N,rama,rama,[1-7]
+Clasificación de la población ocupada por condición de ocupación,2,N,c_ocu11c,c_ocu11c,[01-11]
+Nivel de ingresos para ocupados,1,N,ing7c,ing7c,[1-7]
+Clasificación de la población ocupada por la duración de la jornada,1,N,dur9c,dur9c,[1-9]
+Número de trabajadores,1,N,emple7c,emple7c,[1-7]
+Prestaciones de salud,1,N,medica5c,medica5c,[1-5]
+Buscador de otro empleo para ocupados,1,N,buscar5c,buscar5c,[1-5]
+Sector de actividad económica primer categoría,1,N,rama_est1,rama_est1,[1-4]
+Sector de actividad económica segunda categoría,2,N,rama_est2,rama_est2,[01-11]
+Duración de la jornada a 6 categorías,1,N,dur_est,dur_est,[1-6]
+Tamaño de la unidad económica primer categoría,1,N,ambito1,ambito1,[1-3]
+Tamaño de la unidad económica segunda categoría,1,N,ambito2,ambito2,[1-8]
+Tipo de unidad económica primer categoría,1,N,tue1,tue1,[1-4]
+Tipo de unidad económica segunda categoría,1,N,tue2,tue2,[1-7]
+Tipo de unidad económica tercer categoría,1,N,tue3,tue3,[1-2]
+Buscador de otro trabajo para subordinados y remunerados,1,N,busqueda,busqueda,[1-2]
+Antecedentes laborales,1,N,d_ant_lab,d_ant_lab,[1-2]
+Condición de desocupación,1,N,d_cexp_est,d_cexp_est,[1-4]
+Clasificación de la duración del desempleo,1,N,dur_des,dur_des,[1-6]
+Población subocupada,1,N,sub_o,sub_o,[1]
+Clasificación de subocupados,1,N,s_clasifi,s_clasifi,[1-6]
+Composición de la población subordinada y remunerada,1,N,remune2c,remune2c,"[1,2]"
+Prestaciones laborales,1,N,pre_asa,pre_asa,"[1,3]"
+Disponibilidad de tipo de contrato,1,N,tip_con,tip_con,"[1,6]"
+Población disponible,1,N,dispo,dispo,"[1,7]"
+Población no disponible,1,N,nodispo,nodispo,[1-9]
+Tipo de actividad no económica,1,N,c_inac5c,c_inac5c,[1-5]
+Composición de la PNEA,1,N,pnea_est,pnea_est,"[1,6]"
+Nivel de escolaridad de toda la población,1,N,niv_ins,niv_ins,"[1,5]"
+Grupos de edad a 5 claves,1,N,eda5c,eda5c,"[1,5]"
+Grupos de edad a 7 claves,1,N,eda7c,eda7c,"[1,7]"
+Grupos de edad a 12 claves,2,N,eda12c,eda12c,"[01,12]"
+Grupos de edad a 19 claves,2,N,eda19c,eda19c,"[01,19]"
+Clasificación de la población femenina de 15 años y más por número de hijos,1,N,hij5c,hij5c,[1-5]
+Composición de la PEA y la PNEA,2,N,domestico,domestico,[01-10]
+Años de escolaridad,2,N,anios_esc,anios_esc,"[01-24,99]"
+Horas trabajadas a la semana,3,N,hrsocup,hrsocup,[001-168]
+Ingreso mensual de los ocupados,6,N,ingocup,,[000001-999999]
+Promedio de ingreso por hora trabajada,17,N,ing_x_hrs,ing_x_hrs,"[11 enteros, un punto y 5 decimales]"
+Variable de apoyo  Sí buscó trabajo ,1,N,tpg_p8a,tpg_p8a,[1]
+Dato para el cálculo de la tasa TCCO,1,N,tcco,tcco,[1-3]
+Clasificación de la población cuenta propia en actividades no calificadas,1,N,cp_anoc,cp_anoc,[1]
+Instituciones de atención médica,1,N,imssissste,imssissste,[1-5]
+Población ocupada que trabaja más de 48 horas y gana menos de 1 salario mínimo,1,N,ma48me1sm,ma48me1sm,[1]
+Clasificación de actividades económicas con base al sistema de clasificación Industrial de América del Norte,2,N,scian,scian,[01-21]
+Total de trabajos,1,N,t_tra,t_tra,"[1,2]"
+Clasificación de empleos formales e informales de la primera actividad,1,N,emp_ppal,emp_ppal,"[1,2]"
+Tipo de unidad económica del trabajo principal,1,N,tue_ppal,tue_ppal,"[1,2]"
+Trabajadores transfronterizos del trabajo principal,1,N,trans_ppal,trans_ppal,"[0,1]"
+Filas agregadas de la matriz Hussmanns del trabajo principal,1,N,mh_fil2,mh_fil2,[1-4]
+Columnas de la matriz Hussmanns del trabajo principal,2,N,mh_col,mh_col,[01-10]
+Sectores institucionales del trabajo principal,2,N,sec_ins,sec_ins,[01-11]
+Resultado preliminar ENTI,2,C,r_pre_enti,r_pre_enti,"[00,03]"
+Resultado definitivo ENTI,2,C,r_def_enti,r_def_enti,"[00,03]"
+Edad del integrante del hogar,1,N,eda1,eda1,[1-3]
+Condición de asistencia escolar ,1,N,asis,asis,[1-3]
+Razón de no asistencia escolar ,1,N,n_asi_por,n_asi_por,[1-8]
+Nivel de escolaridad,1,N,n_esc,n_esc,[1-7]
+Tipo de apoyo recibido,1,N,t_apo1,t_apo1,[1-5]
+Condición de ocupación para los menores de 5 a 17 años,1,N,c_ocu,c_ocu,[1-4]
+Condición de quehaceres domésticos,1,N,cqdom,cqdom,[1-4]
+Condición de trabajo infantil,1,N,cti,cti,[1-4]
+Posición en la ocupación,1,N,pos_ocu2,pos_ocu2,[1-4]
+Consecuencias de dejar de trabajar,1,N,c_per,c_per,[1-8]
+Grupos de ocupación,1,N,g_ocu,g_ocu,[1-8]
+Duración de la jornada para los menores de 5 a 17 años,1,N,dur_jor,dur_jor,[1-7]
+Tamaño de la unidad económica,1,N,t_uni,t_uni,[1-6]
+Disponibilidad de local,1,N,local,local,[1-3]
+Nivel de ingresos,1,N,niv_ing,niv_ing,[1-5]
+Condición de aportación de ingreso al hogar,1,N,c_apo,c_apo,[1-3]
+Motivos por los que trabaja,1,N,mot_tra,mot_tra,[1-6]
+Persona para la que trabaja,1,N,t_per,t_per,[1-4]
+Consecuencias de dejar de trabajar para el hogar,1,N,c_hog,c_hog,[1-7]
+Horas dedicadas a quehaceres domésticos,1,N,h_qd,h_qd,[1-4]
+Residente con población de 5 a 17 años,1,N,hog_c5a17,hog_c5a17,"[0,1]"
+Sector de actividad económica en lugar peligroso,1,N,sae_lp,sae_lp,"[0,1]"
+Ocupaciones peligrosas y exposición a riesgos,1,N,op_er,op_er,"[0,1]"
+Jornada inadecuada de trabajo,1,N,jor_ina,jor_ina,"[0,1]"
+Total de horas de quehaceres domésticos,3,N,thrs_qd,,[001-168]
+Ocupaciones peligrosas sector de actividad,1,N,o_pel1,o_pel1,"[0,1]"
+Ocupaciones peligrosas ocupaciones peligrosas,1,N,o_pel2,o_pel2,"[0,1]"
+Ocupaciones peligrosas actividades con exposición a riesgos,1,N,o_pel3,o_pel3,"[0,1]"
+Ocupaciones peligrosas lugares de trabajo no apropiados,1,N,o_pel4,o_pel4,"[0,1]"
+Ocupaciones peligrosas carga cosas pesadas,1,N,o_pel5,o_pel5,"[0,1]"
+Ocupaciones peligrosas ha tenido problemas físicos,1,N,o_pel6,o_pel6,"[0,1]"
+Ocupaciones peligrosas ha manifestado otros problemas,1,N,o_pel7,o_pel7,"[0,1]"
+Ocupaciones peligrosas jornadas de trabajo no apropiadas,1,N,o_pel8,o_pel8,"[0,1]"
+Ocupaciones peligrosas horario de trabajo prolongado,1,N,o_pel9,o_pel9,"[0,1]"
+Sector de actividad,1,N,s_act,s_act,[1-6]
+Número de unidad primaria de muestreo de distribución,7,C,upm_dis,,[0000001-9999999]
+Ponderador,6,N,fac,,[000001-999999]
